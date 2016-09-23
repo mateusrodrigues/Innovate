@@ -43,10 +43,17 @@ namespace WebApplication
         {
             // Gets the correct connection string based on environment
             var connString = "";
-            if (IsDevelopment)
-                connString = Configuration.GetConnectionString("DefaultConnection");
-            else
-                connString = Environment.GetEnvironmentVariable("SQLCONNSTR_DefaultConnection");
+            try
+            {
+                if (IsDevelopment)
+                    connString = Configuration.GetConnectionString("DefaultConnection");
+                else
+                    connString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_DefaultConnection");
+            }
+            catch (Exception ex)
+            {
+                // Connection string is null
+            }
             
             // Add framework services.
             
