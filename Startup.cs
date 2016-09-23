@@ -31,6 +31,11 @@ namespace WebApplication
             }
 
             builder.AddEnvironmentVariables();
+
+            // Add Application Insights
+            if (env.IsDevelopment())
+                builder.AddApplicationInsightsSettings(developerMode: true);
+
             IsDevelopment = env.IsDevelopment();
             Configuration = builder.Build();
         }
@@ -77,6 +82,8 @@ namespace WebApplication
 
             services.AddMvc();
 
+            services.AddApplicationInsightsTelemetry(Configuration);
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -85,6 +92,9 @@ namespace WebApplication
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Application Insights
+            app.UseApplicationInsightsRequestTelemetry();
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -111,6 +121,9 @@ namespace WebApplication
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            // Application Insights exception handling
+            app.UseApplicationInsightsExceptionTelemetry();
         }
     }
 }
