@@ -233,3 +233,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Production-specific sensitive files
+appsettings.Production.json

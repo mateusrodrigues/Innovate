@@ -47,21 +47,11 @@ namespace WebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             // Gets the correct connection string based on environment
-            var connString = "";
-            try
-            {
-                if (IsDevelopment)
-                    connString = Configuration.GetConnectionString("DefaultConnection");
-                else
-                    connString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_DefaultConnection");
-            }
-            catch (Exception ex)
-            {
-                // Connection string is null
-            }
+            var connString = (IsDevelopment) ? Configuration.GetConnectionString("DefaultConnection")
+                : Environment.GetEnvironmentVariable("SQLAZURECONNSTR_DefaultConnection");
             
             // Add framework services.
-            
+
             // Adds the correct database provider depending on hosting environment.
             // Development: SQLite
             // Production: SQL Server
